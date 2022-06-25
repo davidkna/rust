@@ -102,10 +102,13 @@ unsafe fn _print_fmt(fmt: &mut fmt::Formatter<'_>, print_fmt: PrintFmt) -> fmt::
     res?;
     bt_fmt.finish()?;
     if print_fmt == PrintFmt::Short {
+        let pwsh_msg =
+            if cfg!(windows) { " (or `$env:RUST_BACKTRACE=1` in PowerShell)" } else { "" };
+
         writeln!(
             fmt,
             "note: Some details are omitted, \
-             run with `RUST_BACKTRACE=full` for a verbose backtrace."
+             run with `RUST_BACKTRACE=full`{pwsh_msg} for a verbose backtrace."
         )?;
     }
     Ok(())
